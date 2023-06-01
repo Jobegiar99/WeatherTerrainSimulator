@@ -20,7 +20,6 @@ namespace Jobegiar99.Camera
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("HI");
             if (other.tag == "MainMenuCameraEndPoint")
                 transform.position = startPoint.position;
         }

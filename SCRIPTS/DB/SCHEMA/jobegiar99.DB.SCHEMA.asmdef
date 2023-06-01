@@ -1,8 +1,8 @@
 {
-    "name": "Jobegiar99.UI.MainMenu",
+    "name": "jobegiar99.DB",
     "rootNamespace": "",
     "references": [
-        "GUID:eb6f71e11c9c0f74489670e7daf4774f"
+        "GUID:ef98131014eab2e41b6d26d1be1d80ad"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

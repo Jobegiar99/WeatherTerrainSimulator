@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using DB.CRUD;
 namespace UI.MainMenu
 {
     public class UIManager : MonoBehaviour
@@ -12,11 +12,18 @@ namespace UI.MainMenu
         [SerializeField] GameObject CreateTerrainShell;
         [SerializeField] GameObject LoadTerrainShell;
         private GameObject currentActiveElement;
+        [Space(10)]
         #endregion
+        #region DB
+        [SerializeField] DBCRUDOperations db;
         
+        #endregion
+
+        [System.Obsolete]
         private void Start()
         {
             currentActiveElement = LoginShell;
+            
         }
 
         public void GoToSignUpShell()
@@ -41,10 +48,13 @@ namespace UI.MainMenu
             SwitchShell(LoadTerrainShell);
         }
 
+        [System.Obsolete]
         public void GoToCreateOrLoadTerrainShell()
         {
             LogedInHeaderShell.SetActive(true);
             SwitchShell(CreateOrLoadTerrainShell);
+            db.CreateUser("A", "B");
+            db.CreateTerrain();
         }
 
         private void SwitchShell(GameObject nextUiElement) 
