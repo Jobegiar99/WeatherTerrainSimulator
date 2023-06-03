@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using DB.Schema.User;
 
 namespace DB.Schema.Terrain
 {
@@ -12,8 +9,7 @@ namespace DB.Schema.Terrain
     [Serializable]
     public class DBTerrain 
     {
-
-        public string ownerName;
+        public string ID;
         public string name;
 
         /// <summary>
@@ -32,9 +28,9 @@ namespace DB.Schema.Terrain
 
         private byte INITIAL_TIDE_CODE = 0;
 
-        public DBTerrain(DBUser owner, string name, string location, byte size)
+        public DBTerrain(string ID, string name, string location, byte size)
         {
-            this.ownerName = owner.username;
+            this.ID = ID;
             this.name = name;
             this.location = location;
             this.size = size;
@@ -45,6 +41,16 @@ namespace DB.Schema.Terrain
             AddTerrainMatrixLevel();
             terrainStringRepresentation = MatrixToString();
                        
+        }
+
+        public DBTerrain(string ID, string name, string location, string terrainStringRepresentation,byte size)
+        {
+            this.ID = ID;
+            this.name = name;
+            this.location = location;
+            this.size = size;
+            this.terrainStringRepresentation = terrainStringRepresentation;
+
         }
 
         private void AddTerrainMatrixLevel()
@@ -82,6 +88,17 @@ namespace DB.Schema.Terrain
                 }
             }
             return tempMatrix;
+        }
+
+        public string TerrainToJSON()
+        {
+            string terrainName = "__TERRAIN_NAME_BODY__" + name + "__TERRAIN_NAME_BODY__";
+            string terrainLocation = "__TERRAIN_LOCATION_BODY__" + location + "__TERRAIN_LOCATION_BODY__";
+            string strSize = "__TERRAIN_SIZE__" + size.ToString() + "__TERRAIN_SIZE__";
+            string strTerrain = "__TERRAIN_STRING__" + terrainStringRepresentation + "__TERRAIN_STRING__";
+            string jsonData = $"{{ \"name\": \"{terrainName}\",\"location\":\"{terrainLocation}\",\"size\":\"{strSize}\",\"terrain\":\"{strTerrain}\" }}";
+            return jsonData;
+
         }
     }
 }

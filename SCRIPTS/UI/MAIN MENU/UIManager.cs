@@ -1,5 +1,8 @@
 using UnityEngine;
-using DB.CRUD;
+using DB.CRUD.Terrain;
+using DB.Schema.Terrain;
+using System.Collections;
+
 namespace UI.MainMenu
 {
     public class UIManager : MonoBehaviour
@@ -15,7 +18,7 @@ namespace UI.MainMenu
         [Space(10)]
         #endregion
         #region DB
-        [SerializeField] DBCRUDOperations db;
+        [SerializeField] DBTerrainCRUD db;
         
         #endregion
 
@@ -48,13 +51,11 @@ namespace UI.MainMenu
             SwitchShell(LoadTerrainShell);
         }
 
-        [System.Obsolete]
         public void GoToCreateOrLoadTerrainShell()
         {
             LogedInHeaderShell.SetActive(true);
             SwitchShell(CreateOrLoadTerrainShell);
-            db.CreateUser("A", "B");
-            db.CreateTerrain();
+
         }
 
         private void SwitchShell(GameObject nextUiElement) 

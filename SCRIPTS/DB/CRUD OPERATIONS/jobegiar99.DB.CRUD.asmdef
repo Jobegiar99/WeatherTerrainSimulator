@@ -2,8 +2,8 @@
     "name": "jobegiar99.DB.CRUD",
     "rootNamespace": "",
     "references": [
-        "GUID:153e807d6fa7c424fbcfdce9d6edef1e",
-        "GUID:a7f5aa73b16e6c842922a1b1d0853b16"
+        "GUID:a7f5aa73b16e6c842922a1b1d0853b16",
+        "GUID:ef98131014eab2e41b6d26d1be1d80ad"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
