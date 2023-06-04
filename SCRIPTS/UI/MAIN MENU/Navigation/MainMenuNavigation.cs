@@ -3,9 +3,9 @@ using DB.CRUD.Terrain;
 using DB.Schema.Terrain;
 using System.Collections;
 
-namespace UI.MainMenu
+namespace UI.Navigation.MainMenu
 {
-    public class UIManager : MonoBehaviour
+    public class MainMenuNavigation : MonoBehaviour
     {
         #region UI Elements
         [SerializeField] GameObject LoginShell;

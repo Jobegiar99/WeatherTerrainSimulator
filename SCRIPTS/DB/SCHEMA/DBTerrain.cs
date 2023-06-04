@@ -21,18 +21,20 @@ namespace DB.Schema.Terrain
         public List<List<List<byte>>> terrainData;
 
         // current "real" world location of the terrain for weather purposes.
-        public string location;
+        public string latitude;
+        public string longitude;
         public byte size;
         public string terrainStringRepresentation;
 
 
         private byte INITIAL_TIDE_CODE = 0;
 
-        public DBTerrain(string ID, string name, string location, byte size)
+        public DBTerrain(string ID, string name, string latitude, string longitude, byte size)
         {
             this.ID = ID;
             this.name = name;
-            this.location = location;
+            this.latitude = latitude;
+            this.longitude = longitude;
             this.size = size;
             terrainData = new List<List<List<byte>>>();
             AddTerrainMatrixLevel();
@@ -43,11 +45,12 @@ namespace DB.Schema.Terrain
                        
         }
 
-        public DBTerrain(string ID, string name, string location, string terrainStringRepresentation,byte size)
+        public DBTerrain(string ID, string name, string latitude,string longitude, string terrainStringRepresentation,byte size)
         {
             this.ID = ID;
             this.name = name;
-            this.location = location;
+            this.latitude = latitude;
+            this.longitude = longitude;
             this.size = size;
             this.terrainStringRepresentation = terrainStringRepresentation;
 
@@ -93,10 +96,11 @@ namespace DB.Schema.Terrain
         public string TerrainToJSON()
         {
             string terrainName = "__TERRAIN_NAME_BODY__" + name + "__TERRAIN_NAME_BODY__";
-            string terrainLocation = "__TERRAIN_LOCATION_BODY__" + location + "__TERRAIN_LOCATION_BODY__";
+            string terrainLatitude = "__TERRAIN_LATITUDE_BODY__" + latitude + "__TERRAIN_LATITUDE_BODY__";
+            string terrainLongitude = "__TERRAIN_LONGITUDE_BODY__" + longitude + "__TERRAIN_LONGITUDE_BODY__";
             string strSize = "__TERRAIN_SIZE__" + size.ToString() + "__TERRAIN_SIZE__";
             string strTerrain = "__TERRAIN_STRING__" + terrainStringRepresentation + "__TERRAIN_STRING__";
-            string jsonData = $"{{ \"name\": \"{terrainName}\",\"location\":\"{terrainLocation}\",\"size\":\"{strSize}\",\"terrain\":\"{strTerrain}\" }}";
+            string jsonData = $"{{ \"name\": \"{terrainName}\",\"latitude\":\"{terrainLatitude}\",\"longitude\":\"{terrainLongitude}\",\"size\":\"{strSize}\",\"terrain\":\"{strTerrain}\" }}";
             return jsonData;
 
         }

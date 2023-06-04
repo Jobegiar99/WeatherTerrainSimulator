@@ -3,19 +3,18 @@ using Proyecto26;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace DB.CRUD.Terrain
 {
     public class DBTerrainCRUD 
     {
-        private static string url = "AUTHORIZED_ACCESS_ONLY";
+        private static string url = "a";
 
         public DBTerrain currentTerrain;
         public List<DBTerrain> terrainList;
-        public string currentUser;
-        public string terrainListOwner;
 
-        DBTerrainCRUD()
+        public DBTerrainCRUD()
         {
             terrainList = new List<DBTerrain>();
         }
@@ -28,14 +27,14 @@ namespace DB.CRUD.Terrain
         /// <param name="location">The real world location of this terrain</param>
         /// <param name="size">number of rows and columns</param>
         /// <returns>The instance of the recently created username</returns>
-        public void CreateTerrain(string terrainName, string location,byte size)
+        public void CreateTerrain(string owner,string terrainName, string latitude, string longitude,byte size, Action<bool> callback)
         {
-            currentTerrain = new DBTerrain("NONE",terrainName, location, size);
-            RestClient.Post($"https://terrainweathersimulator-default-rtdb.firebaseio.com/terrain/{currentUser}.json", currentTerrain.TerrainToJSON())
+            currentTerrain = new DBTerrain("NONE",terrainName, latitude,longitude, size);
+            RestClient.Post($"{url}terrain/{owner}.json", currentTerrain.TerrainToJSON())
                 .Then(response =>
                 {
                     currentTerrain.ID = response.Text.Split(":")[1].Split('"')[1];
-
+                    callback?.Invoke(true);
                 });
         }
 
@@ -43,38 +42,47 @@ namespace DB.CRUD.Terrain
         /// Fills the terrain list with  data from the DB for the current user.
         /// </summary>
         /// <param name="ownerUsername">Owner of the terrains</param>
-        public void ReadTerrains()
+        public void ReadTerrains(string owner, Action<bool> callback)
         {
-            if (terrainListOwner == currentUser && terrainList.Count != 0)
-                return;
-
-            string query = $"{url}/terrain/{currentUser}.json";
+            terrainList.Clear();
+            string query = $"{url}/terrain/{owner}.json";
             RestClient.Get(query).Then(response =>
             {
+                if(response.Text == "null")
+                {
+                    callback?.Invoke(true);
+                    return;
+                }
                 List<string> terrainData = response.Text.Split('{').ToList<string>();
-                string terrainID = terrainData[1].Substring(1, terrainData[1].Length-2);
+ 
+                string terrainID = terrainData[1].Substring(1, terrainData[1].Length-3);
                 string terrainName = "";
-                string terrainLocation = "";
+                string terrainLatitude = "";
+                string terrainLongitude = "";
                 string terrainMatrix = "";
                 string terrainSize = "";
-                for(int i = 2; i < terrainData.Count; i++) 
+
+                for (int i = 2; i < terrainData.Count; i++) 
                 {
                     List<string> splitData = terrainData[i].Split(':').ToList<string>();
                     foreach(string s in splitData)
                     {
                         ReadTerrainsHelper(s, "__TERRAIN_NAME_BODY__",ref terrainName);
-                        ReadTerrainsHelper(s, "__TERRAIN_LOCATION_BODY__", ref terrainLocation);
+                        ReadTerrainsHelper(s, "__TERRAIN_LATITUDE_BODY__", ref terrainLatitude);
+                        ReadTerrainsHelper(s, "__TERRAIN_LONGITUDE_BODY__", ref terrainLongitude);
                         ReadTerrainsHelper(s, "__TERRAIN_SIZE__", ref terrainSize );
                         ReadTerrainsHelper(s, "__TERRAIN_STRING__", ref terrainMatrix);
                     }
-                    terrainList.Add(new DBTerrain(terrainID, terrainName, terrainLocation, terrainMatrix, byte.Parse(terrainSize)));
-                    terrainID = terrainData[i].Split('}')[1].Split(',')[1].Split('"')[1];
+                    terrainList.Add(new DBTerrain(terrainID, terrainName, terrainLatitude,terrainLongitude, terrainMatrix, byte.Parse(terrainSize)));
+                    if( i < terrainData.Count-1 ) 
+                        terrainID = terrainData[i].Split('}')[1].Split(',')[1].Split('"')[1];
                 }
-
+                callback?.Invoke(true);
 
             }).Catch(err =>
             {
                 Debug.LogError("Error: " + err.Message);
+                callback?.Invoke(false);
             });
         }
         /// <summary>
@@ -99,9 +107,9 @@ namespace DB.CRUD.Terrain
         /// </summary>
         /// <param name="updatedTerrain">updates version of the terrain</param>
         /// <param name="username">owner of the terrain</param>
-        public void UpdateTerrain()
+        public void UpdateTerrain(string owner)
         {
-            string query = $"{url}/terrain/{currentUser}/{currentTerrain.ID}.json";
+            string query = $"{url}/terrain/{owner}/{currentTerrain.ID}.json";
             RestClient.Put(query, currentTerrain.TerrainToJSON())
                 .Then(response =>
                 {
@@ -116,9 +124,9 @@ namespace DB.CRUD.Terrain
         /// <summary>
         /// Removes the terrain from the database.
         /// </summary>
-        public void DeleteTerrain()
+        public void DeleteTerrain(string owner)
         {
-            string query = $"{url}/terrain/{currentUser}/{currentTerrain.ID}.json";
+            string query = $"{url}/terrain/{owner}/{currentTerrain.ID}.json";
             RestClient.Delete(query)
                 .Then(response =>
                 {
