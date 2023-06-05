@@ -1,0 +1,17 @@
+{
+    "name": "jobegiar99.DB.CRUD",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a7f5aa73b16e6c842922a1b1d0853b16",
+        "GUID:ef98131014eab2e41b6d26d1be1d80ad"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

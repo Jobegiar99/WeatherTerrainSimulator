@@ -1,0 +1,17 @@
+{
+    "name": "Jobegiar99.DB.Manager",
+    "rootNamespace": "",
+    "references": [
+        "GUID:eb6f71e11c9c0f74489670e7daf4774f",
+        "GUID:a7f5aa73b16e6c842922a1b1d0853b16"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

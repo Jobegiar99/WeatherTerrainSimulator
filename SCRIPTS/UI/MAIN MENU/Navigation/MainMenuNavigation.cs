@@ -1,8 +1,11 @@
 using UnityEngine;
+using DB.CRUD.Terrain;
+using DB.Schema.Terrain;
+using System.Collections;
 
-namespace UI.MainMenu
+namespace UI.Navigation.MainMenu
 {
-    public class UIManager : MonoBehaviour
+    public class MainMenuNavigation : MonoBehaviour
     {
         #region UI Elements
         [SerializeField] GameObject LoginShell;
@@ -12,11 +15,18 @@ namespace UI.MainMenu
         [SerializeField] GameObject CreateTerrainShell;
         [SerializeField] GameObject LoadTerrainShell;
         private GameObject currentActiveElement;
+        [Space(10)]
         #endregion
+        #region DB
+        [SerializeField] DBTerrainCRUD db;
         
+        #endregion
+
+        [System.Obsolete]
         private void Start()
         {
             currentActiveElement = LoginShell;
+            
         }
 
         public void GoToSignUpShell()
@@ -45,6 +55,7 @@ namespace UI.MainMenu
         {
             LogedInHeaderShell.SetActive(true);
             SwitchShell(CreateOrLoadTerrainShell);
+
         }
 
         private void SwitchShell(GameObject nextUiElement) 

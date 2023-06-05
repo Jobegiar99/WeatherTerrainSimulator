@@ -1,0 +1,17 @@
+{
+    "name": "Jobegiar99.UI.Misc",
+    "rootNamespace": "",
+    "references": [
+        "GUID:89d27df3674cae343a601f46c8f6f304",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
