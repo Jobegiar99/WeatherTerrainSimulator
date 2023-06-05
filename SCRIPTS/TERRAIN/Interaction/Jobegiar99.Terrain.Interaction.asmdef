@@ -1,0 +1,17 @@
+{
+    "name": "Jobegiar99.Terrain.Interaction",
+    "rootNamespace": "",
+    "references": [
+        "GUID:20190c4e7ef5a5446924f9d7214bc043",
+        "GUID:89d27df3674cae343a601f46c8f6f304"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

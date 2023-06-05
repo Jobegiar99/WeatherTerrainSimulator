@@ -2,6 +2,7 @@ using DB.Manager;
 using DB.Schema.Terrain;
 using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -25,6 +26,10 @@ namespace Terrain.Renderer
         [Space(10)]
         [Header("Tilebase")]
         [SerializeField] TileBase grass;
+        [SerializeField] TileBase ground;
+        [SerializeField] TileBase rockPath;
+        [SerializeField] TileBase water;
+        [SerializeField] TileBase tree;
         #endregion
 
         private Dictionary<byte, Tilemap> tilemapLevel;
@@ -40,6 +45,11 @@ namespace Terrain.Renderer
             tilemapLevel[0] = floor;
             tilemapLevel[1] = decoration;
 
+            tileBaseMap[0] = grass;
+            tileBaseMap[1] = ground;
+            tileBaseMap[2] = rockPath;
+            tileBaseMap[3] = water;
+
 
         }
 
@@ -53,11 +63,35 @@ namespace Terrain.Renderer
                 {
                     for(byte z = 0; z < currentTerrain.size; z++)
                     {
-                        tilemapLevel[y].SetTile(new Vector3Int(x, z,0), grass);
-                        Debug.Log("here" + x + " " + z + " " + y);
+                        byte tileCode = currentTerrain.terrainData[y][x][z];
+                        if (y == 0)
+                            tilemapLevel[0].SetTile(new Vector3Int(x, z,0), tileBaseMap[tileCode]);
+                        else if (tileCode == 1)
+                        {
+                            tilemapLevel[1].SetTile(new Vector3Int(x, z, 0), tree);
+                        }
                     }
                 }
             }
+        }
+
+        public void UpdateTile(Vector3 position, byte code)
+        {
+            Vector3Int pos = new Vector3Int((int)Mathf.Floor(position.x), (int)Mathf.Floor(position.y), 0);
+            floor.SetTile(pos, tileBaseMap[code]);
+            db.GetCurrentTerrain().terrainData[0][pos.x][pos.y] = code;
+        }
+
+        public void PlantTree(Vector3Int position)
+        {
+            decoration.SetTile(position, tree);
+            db.GetCurrentTerrain().terrainData[1][position.x][position.y] = 1;
+        }
+
+        public void RemoveTree(Vector3Int position)
+        {
+            decoration.SetTile(position, null);
+            db.GetCurrentTerrain().terrainData[1][position.x][position.y] = 0;
         }
     }
 }

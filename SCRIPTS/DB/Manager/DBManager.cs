@@ -118,5 +118,10 @@ namespace DB.Manager {
         {
             return terrainDB.currentTerrain;
         }
+
+        public byte GetTerrainSize()
+        {
+            return GetCurrentTerrain().size;
+        }
     }
 }
