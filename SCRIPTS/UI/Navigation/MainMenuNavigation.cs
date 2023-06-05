@@ -14,6 +14,8 @@ namespace UI.Navigation.MainMenu
         [SerializeField] GameObject CreateOrLoadTerrainShell;
         [SerializeField] GameObject CreateTerrainShell;
         [SerializeField] GameObject LoadTerrainShell;
+        [SerializeField] GameObject GameplayHeaderShell;
+        [SerializeField] GameObject GameplayFootShell;
         private GameObject currentActiveElement;
         [Space(10)]
         #endregion
@@ -58,11 +60,19 @@ namespace UI.Navigation.MainMenu
 
         }
 
+        public void GoToGameplayFootShell()
+        {
+            LogedInHeaderShell.SetActive(false);
+            GameplayHeaderShell.SetActive(true);
+            SwitchShell(GameplayFootShell);
+        }
+
         private void SwitchShell(GameObject nextUiElement) 
         {
             currentActiveElement.SetActive(false);
             nextUiElement.SetActive(true);
             currentActiveElement=nextUiElement;
         }
+
     }
 }

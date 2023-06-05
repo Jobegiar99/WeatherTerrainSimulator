@@ -9,7 +9,7 @@ namespace DB.CRUD.Terrain
 {
     public class DBTerrainCRUD 
     {
-        private static string url = "a";
+        private static string url = "me";
 
         public DBTerrain currentTerrain;
         public List<DBTerrain> terrainList;
@@ -35,6 +35,7 @@ namespace DB.CRUD.Terrain
                 {
                     currentTerrain.ID = response.Text.Split(":")[1].Split('"')[1];
                     callback?.Invoke(true);
+                    return;
                 });
         }
 
@@ -107,17 +108,22 @@ namespace DB.CRUD.Terrain
         /// </summary>
         /// <param name="updatedTerrain">updates version of the terrain</param>
         /// <param name="username">owner of the terrain</param>
-        public void UpdateTerrain(string owner)
+        public void UpdateTerrain(string owner, Action<bool> callback)
         {
+            currentTerrain.terrainStringRepresentation = currentTerrain.MatrixToString();
+            Debug.Log(currentTerrain.ID);
+
+            Debug.Log(currentTerrain.TerrainToJSON());
             string query = $"{url}/terrain/{owner}/{currentTerrain.ID}.json";
             RestClient.Put(query, currentTerrain.TerrainToJSON())
                 .Then(response =>
                 {
-                    Debug.Log("SUCCESS");
+                    callback?.Invoke(true);
                 })
                 .Catch(err =>
                 {
                     Debug.LogError(err.Message);
+                    callback?.Invoke(false);
                 });
         }
 
@@ -137,6 +143,8 @@ namespace DB.CRUD.Terrain
                     Debug.LogError(err.Message);
                 });
         }
+
+
      
     }
 }

@@ -1,6 +1,7 @@
 using DB.Manager;
 using System.Collections;
 using System.Collections.Generic;
+using Terrain.Renderer;
 using TMPro;
 using UI.Navigation.MainMenu;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace UI.Buttons.MainMenu.CreateTerrain
         [Header("Script References")]
         [SerializeField] MainMenuNavigation mainMenuNavigation;
         [SerializeField] DBManager db;
+        [SerializeField] TerrainRenderer terrainRenderer;
         #endregion
 
         #region InputFields
@@ -60,11 +62,12 @@ namespace UI.Buttons.MainMenu.CreateTerrain
                 (byte)terrainSize.value, 
                 createdTerrain =>
                 {
-                    //go to gameplay mode menu
+                    terrainRenderer.RenderTerrain();
                     loadingShell.SetActive(false);
-                    transform.parent.parent.parent.gameObject.SetActive(false);
+                    mainMenuNavigation.GoToGameplayFootShell();
 
                 });
+
 
 
         }

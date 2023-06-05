@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace DB.Schema.Terrain
 {
@@ -37,8 +39,9 @@ namespace DB.Schema.Terrain
             this.longitude = longitude;
             this.size = size;
             terrainData = new List<List<List<byte>>>();
-            AddTerrainMatrixLevel();
-            AddTerrainMatrixLevel();
+
+            //2 because the first one is for the ground
+            //and the second one for the decoration
             AddTerrainMatrixLevel();
             AddTerrainMatrixLevel();
             terrainStringRepresentation = MatrixToString();
@@ -53,9 +56,12 @@ namespace DB.Schema.Terrain
             this.longitude = longitude;
             this.size = size;
             this.terrainStringRepresentation = terrainStringRepresentation;
-
+            terrainData = new List<List<List<byte>>>();
         }
 
+        /// <summary>
+        /// Adds a Level into the matrix
+        /// </summary>
         private void AddTerrainMatrixLevel()
         {
             terrainData.Add(new List<List<byte>>());
@@ -77,10 +83,10 @@ namespace DB.Schema.Terrain
         /// Each value is separated by a semicolon.
         /// </summary>
         /// <returns>A string with the matrix data per level, each cell separated by a semicolon</returns>
-        private string MatrixToString()
+        public string MatrixToString()
         {
             string tempMatrix = "";
-            for(int y = 0; y < terrainData.Count; y++)
+            for(int y = 0; y < 2; y++)
             {
                 for(int x = 0; x < size;x++)
                 {
@@ -90,7 +96,28 @@ namespace DB.Schema.Terrain
                     }
                 }
             }
+            terrainStringRepresentation = tempMatrix;
             return tempMatrix;
+        }
+
+        public void StringToMatrix()
+        {
+            List<string> terrainCells = terrainStringRepresentation.Split(';').ToList<string>();
+            int terrainCellindex = 0;
+            terrainData = new List<List<List<byte>>>();
+            AddTerrainMatrixLevel();
+            AddTerrainMatrixLevel();
+            for (int y = 0; y < terrainData.Count; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    for (int z = 0; z < size; z++)
+                    {
+                        terrainData[y][x][z] = byte.Parse(terrainCells[terrainCellindex]);
+                        terrainCellindex++;
+                    }
+                }
+            }
         }
 
         public string TerrainToJSON()
