@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using WeatherAPI.Manager;
+using TMPro;
+using UnityEngine.UI;
 
 namespace Terrain.Renderer
 {
@@ -13,11 +16,22 @@ namespace Terrain.Renderer
         #region Script References
         [Header("Script References")]
         [SerializeField] DBManager db;
+        [SerializeField] WeatherApiManager weatherAPI;
+        #endregion
+
+        #region UI Elements
+        [Header("UI Elements")]
+        [SerializeField] TMP_InputField latitudeInput;
+        [SerializeField] TMP_InputField longitudeInput;
+        [SerializeField] TextMeshProUGUI temperature;
+        [SerializeField] Slider hourSlider;
+        [SerializeField] GameObject rain;
+        [SerializeField] GameObject snow;
         #endregion
 
         #region Tileset
         [Space(10)]
-        [Header("Tilesets")]
+        [Header("UI elements")]
         [SerializeField] Tilemap floor;
         [SerializeField] Tilemap decoration;
         #endregion
@@ -57,22 +71,28 @@ namespace Terrain.Renderer
         {
 
             DBTerrain currentTerrain = db.GetCurrentTerrain();
-            for (byte y = 0; y < 2; y++)
+            weatherAPI.GetAPIData(float.Parse(currentTerrain.latitude), float.Parse(currentTerrain.longitude), finishLoadingData =>
             {
-                for(byte x = 0; x < currentTerrain.size; x++)
+                for (byte y = 0; y < 2; y++)
                 {
-                    for(byte z = 0; z < currentTerrain.size; z++)
+                    for (byte x = 0; x < currentTerrain.size; x++)
                     {
-                        byte tileCode = currentTerrain.terrainData[y][x][z];
-                        if (y == 0)
-                            tilemapLevel[0].SetTile(new Vector3Int(x, z,0), tileBaseMap[tileCode]);
-                        else if (tileCode == 1)
+                        for (byte z = 0; z < currentTerrain.size; z++)
                         {
-                            tilemapLevel[1].SetTile(new Vector3Int(x, z, 0), tree);
+                            byte tileCode = currentTerrain.terrainData[y][x][z];
+                            if (y == 0)
+                                tilemapLevel[0].SetTile(new Vector3Int(x, z, 0), tileBaseMap[tileCode]);
+                            else if (tileCode == 1)
+                            {
+                                tilemapLevel[1].SetTile(new Vector3Int(x, z, 0), tree);
+                            }
                         }
                     }
                 }
-            }
+                latitudeInput.text = currentTerrain.latitude;
+                longitudeInput.text = currentTerrain.longitude;
+                SetTemperature();
+            });
         }
 
         public void UpdateTile(Vector3 position, byte code)
@@ -92,6 +112,30 @@ namespace Terrain.Renderer
         {
             decoration.SetTile(position, null);
             db.GetCurrentTerrain().terrainData[1][position.x][position.y] = 0;
+        }
+
+        public void GetWeatherCode()
+        {
+            byte code = (byte) weatherAPI.GetWeatherCode((byte) hourSlider.value);
+            rain.SetActive(code == 1);
+            snow.SetActive(code == 2);  
+        }
+
+        public void SetTemperature()
+        {
+            temperature.text = weatherAPI.GetTemperature((byte)hourSlider.value).ToString();
+        }
+
+        public void UpdateWeatherAPI()
+        {
+            weatherAPI.GetAPIData(float.Parse(latitudeInput.text), float.Parse(longitudeInput.text),result =>
+            {
+                GetWeatherCode();
+                SetTemperature();
+            });
+            DBTerrain terrain = db.GetCurrentTerrain();
+            terrain.longitude = longitudeInput.text;
+            terrain.latitude = latitudeInput.text;
         }
     }
 }

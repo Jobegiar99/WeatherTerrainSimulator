@@ -29,7 +29,6 @@ namespace UI.Buttons.MainMenu.Login
             loadingShell.SetActive(true);
             db.CanLogin(username.text, password.text, canLogin =>
             {
-                
                 if (canLogin)
                 {
                     db.LoadTerrains(terrainsLoaded =>

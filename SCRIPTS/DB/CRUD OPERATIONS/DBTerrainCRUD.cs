@@ -9,7 +9,7 @@ namespace DB.CRUD.Terrain
 {
     public class DBTerrainCRUD 
     {
-        private static string url = "me";
+        private static string url = "url";
 
         public DBTerrain currentTerrain;
         public List<DBTerrain> terrainList;
@@ -111,9 +111,6 @@ namespace DB.CRUD.Terrain
         public void UpdateTerrain(string owner, Action<bool> callback)
         {
             currentTerrain.terrainStringRepresentation = currentTerrain.MatrixToString();
-            Debug.Log(currentTerrain.ID);
-
-            Debug.Log(currentTerrain.TerrainToJSON());
             string query = $"{url}/terrain/{owner}/{currentTerrain.ID}.json";
             RestClient.Put(query, currentTerrain.TerrainToJSON())
                 .Then(response =>

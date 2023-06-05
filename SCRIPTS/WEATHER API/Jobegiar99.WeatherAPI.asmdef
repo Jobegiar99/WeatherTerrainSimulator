@@ -1,11 +1,8 @@
 {
-    "name": "Jobegiar99.Terrain.Renderer",
+    "name": "Jobegiar99.WeatherAPI",
     "rootNamespace": "",
     "references": [
-        "jobegiar99.DB",
-        "Jobegiar99.DB.Manager",
-        "Jobegiar99.WeatherAPI",
-        "Unity.TextMeshPro"
+        "GUID:ef98131014eab2e41b6d26d1be1d80ad"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
