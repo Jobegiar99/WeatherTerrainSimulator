@@ -60,9 +60,9 @@ namespace UI.Buttons.MainMenu.CreateTerrain
                 (byte)terrainSize.value, 
                 createdTerrain =>
                 {
-                    //go to gameplay mode menu
+                   
                     loadingShell.SetActive(false);
-                    transform.parent.parent.parent.gameObject.SetActive(false);
+                    mainMenuNavigation.GoToGameplayFootShell();
 
                 });
 

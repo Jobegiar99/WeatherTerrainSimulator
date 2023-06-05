@@ -107,17 +107,18 @@ namespace DB.CRUD.Terrain
         /// </summary>
         /// <param name="updatedTerrain">updates version of the terrain</param>
         /// <param name="username">owner of the terrain</param>
-        public void UpdateTerrain(string owner)
+        public void UpdateTerrain(string owner, Action<bool> callback)
         {
             string query = $"{url}/terrain/{owner}/{currentTerrain.ID}.json";
             RestClient.Put(query, currentTerrain.TerrainToJSON())
                 .Then(response =>
                 {
-                    Debug.Log("SUCCESS");
+                    callback?.Invoke(true);
                 })
                 .Catch(err =>
                 {
                     Debug.LogError(err.Message);
+                    callback?.Invoke(false);
                 });
         }
 
@@ -137,6 +138,8 @@ namespace DB.CRUD.Terrain
                     Debug.LogError(err.Message);
                 });
         }
+
+
      
     }
 }

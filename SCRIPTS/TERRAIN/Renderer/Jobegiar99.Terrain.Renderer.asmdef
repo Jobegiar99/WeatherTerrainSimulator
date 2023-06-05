@@ -1,0 +1,17 @@
+{
+    "name": "Jobegiar99.Terrain.Renderer",
+    "rootNamespace": "",
+    "references": [
+        "jobegiar99.DB",
+        "Jobegiar99.DB.Manager"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

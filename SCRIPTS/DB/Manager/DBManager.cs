@@ -99,5 +99,24 @@ namespace DB.Manager {
                     callback?.Invoke(true);
                 });
         }
+
+        public void SaveTerrain(Action<bool> callback)
+        {
+            terrainDB.UpdateTerrain(GetUsername(), result =>
+            {
+                callback.Invoke(result);
+            });
+        }
+
+        public void SetCurrentTerrain(int name)
+        {
+            terrainDB.currentTerrain = terrainDB.terrainList[name];
+            terrainDB.currentTerrain.StringToMatrix();
+        }
+
+        public DBTerrain GetCurrentTerrain()
+        {
+            return terrainDB.currentTerrain;
+        }
     }
 }
