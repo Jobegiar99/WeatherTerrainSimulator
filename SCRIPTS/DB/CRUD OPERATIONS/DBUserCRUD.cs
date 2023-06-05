@@ -7,7 +7,7 @@ namespace DB.CRUD.User
 {
     public class DBUserCRUD
     {
-        private static string url = "help";
+        private static string url = "url";
 
         public DBUser currentUser;
 
